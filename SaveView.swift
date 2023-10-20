@@ -2,18 +2,10 @@ import SwiftUI
 
 struct SaveView: View {
     
-    //MARK: MVP - Part I
-    
-    
-    
-    
-    //MARK: Stretch #1 - Part I
-   
-    
-    
-    
+    @State var number1: Int?
     @State var number2: Int?
     
+    @State var url1: URL?
     @State var url2: URL?
     
     @State var arrayNumber1: Double?
@@ -24,23 +16,26 @@ struct SaveView: View {
     @State var age: Int?
     @State var phone: String = ""
     
+    
     var body: some View {
         VStack {
             Group {
                 
                 TitleView(name: "MVP")
                 HStack {
-                    //TODO: MVP
-//                    TextField("Integer #1", value: $number1, format: .number)
+                    
+                    TextField("Integer #1", value: $number1, format: .number)
+                    
                     TextField("Integer #2", value: $number2, format: .number)
                 }
                 .textFieldStyle(.roundedBorder)
                 Button("Save") {
-                    //MARK: MVP - Part II
                     
+                    UserDefaults.standard.set(number1, forKey: "number1")
+                    UserDefaults.standard.set(number2, forKey: "number2")
                     
-                    
-                    
+                    UserDefaults.standard.set(url1, forKey: "url1")
+                    UserDefaults.standard.set(url2, forKey: "url2")
                     
                 }
                 .frame(width: 200, height: 50)
@@ -52,11 +47,12 @@ struct SaveView: View {
             Group {
                 TitleView(name: "Stretch #1")
                 VStack {
-                    //TODO: Stretch #1
-//                    TextField("Enter URL #1", text: Binding(
-//                        get: { url1?.absoluteString ?? "" },
-//                        set: { url1 = URL(string: $0) }
-//                    ))
+                    
+                    TextField("Enter URL #1", text: Binding(
+                        get: { url1?.absoluteString ?? "" },
+                        set: { url1 = URL(string: $0) }
+                        
+                    ))
                     TextField("Enter URL #2", text: Binding(
                         get: { url2?.absoluteString ?? "" },
                         set: { url2 = URL(string: $0) }
@@ -66,8 +62,9 @@ struct SaveView: View {
                 .autocorrectionDisabled(true)
                 .textFieldStyle(.roundedBorder)
                 Button("Save") {
-                    //MARK: Stretch #1 - Part II
-                   
+                    
+                    UserDefaults.standard.set(url1, forKey: "url1")
+                    UserDefaults.standard.set(url2, forKey: "url2")
                     
                     
                     
@@ -91,11 +88,7 @@ struct SaveView: View {
                 .textFieldStyle(.roundedBorder)
                 
                 Button("Save") {
-                    //MARK: Stretch #2 - Part I
-                    
-
-
-                    
+                    UserDefaults.standard.set([arrayNumber1!, arrayNumber2!, arrayNumber3!], forKey: "arrayNumbers")
                     
                 }
                 .frame(width: 200, height: 50)
@@ -103,7 +96,7 @@ struct SaveView: View {
                 .background(.blue)
                 .clipShape(Capsule())
             }
-            
+            //Spacer(minLength: 100)
             Group {
                 TitleView(name: "Stretch #3")
                 VStack {
@@ -113,22 +106,24 @@ struct SaveView: View {
                 }
                 .textFieldStyle(.roundedBorder)
                 Button("Save") {
-                    //MARK: Stretch #3 - Part II
+                    let t = contact(names: name, ages: age!, phoneNumbers: phone)
                     
-                    
-                    
-                    
-                    
+                    if let encoded = try? JSONEncoder().encode(t){
+                    UserDefaults.standard.set(encoded, forKey: "contactInfo")
+                    } else {
+                    print("Encoding Failed")
+                    }
                 }
                 .frame(width: 200, height: 50)
                 .foregroundColor(.white)
                 .background(.blue)
                 .clipShape(Capsule())
             }
-            
+            Spacer(minLength: 100)
         }
         .frame(maxWidth: .infinity)
         .padding()
     }
 }
+
 
